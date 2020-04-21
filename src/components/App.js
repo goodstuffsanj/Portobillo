@@ -38,6 +38,17 @@ class App extends Component {
       this.setState({billrentalpayment})
       const numberOfTransactions = await billrentalpayment.methods.numberOfTransactions().call()
       console.log(numberOfTransactions.toString())
+      this.setState({ numberOfTransactions })
+      // Load bills
+      for (var i = 1; i <= numberOfTransactions; i++) {
+        const bill = await billrentalpayment.methods.bills(i).call()
+        this.setState({
+          bills: [...this.state.bills, bill]
+        })
+      }
+      console.log(this.state.bills)
+
+
       this.setState({ loading: false})
     }
     else {
@@ -57,11 +68,21 @@ class App extends Component {
       loading: true
     }
     this.requestPayment = this.requestPayment.bind(this) //this is how we let react know that requestpayment we are passing as a prop in the HTML below is the same as the function right below this constructor
+    this.payBill = this.payBill.bind(this)
   }
 
   requestPayment(name, amount, payer) {
     this.setState({ loading: true })
     this.state.billrentalpayment.methods.requestPayment(name, amount, payer).send({ from: this.state.account })
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false })
+    })
+  }
+
+  payBill(id, amount) {
+    console.log("Inside the payBill method in App.js")
+    this.setState({ loading: true })
+    this.state.billrentalpayment.methods.payBill(id).send({ from: this.state.account, value: amount })
     .once('receipt', (receipt) => {
       this.setState({ loading: false })
     })
@@ -77,7 +98,10 @@ class App extends Component {
             <main role="main" className="col-lg-12 d-flex">
               { this.state.loading
                 ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>
-                : <Main requestPayment={this.requestPayment} />
+                : <Main
+                  bills={this.state.bills}
+                  requestPayment={this.requestPayment}
+                  payBill={this.payBill} />
               }
             </main>
           </div>
