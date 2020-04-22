@@ -1,1 +1,17 @@
 /* Styles go here */
+body {
+    background-color: ghostwhite;
+}
+
+.navbar {
+    background-color: #00266B;
+    color: #00266B;
+    font-size: 18px;
+    height: 50px;
+}
+
+.navbar-brand {
+    /* background-color: #00266B; */
+    font-size: 24px;
+    color: #00266B;
+}

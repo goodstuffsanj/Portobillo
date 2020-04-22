@@ -73,6 +73,10 @@ class App extends Component {
 
   requestPayment(name, amount, payer) {
     this.setState({ loading: true })
+    if(amount < 0) {
+      alert("You have entered a negative amount which means you will be paying the payer. Is that what you want? I think not.")
+      window.location.reload()
+    }
     this.state.billrentalpayment.methods.requestPayment(name, amount, payer).send({ from: this.state.account })
     .once('receipt', (receipt) => {
       this.setState({ loading: false })
@@ -80,7 +84,6 @@ class App extends Component {
   }
 
   payBill(id, amount) {
-    console.log("Inside the payBill method in App.js")
     this.setState({ loading: true })
     this.state.billrentalpayment.methods.payBill(id).send({ from: this.state.account, value: amount })
     .once('receipt', (receipt) => {
@@ -99,6 +102,7 @@ class App extends Component {
               { this.state.loading
                 ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>
                 : <Main
+                  account={this.state.account}
                   bills={this.state.bills}
                   requestPayment={this.requestPayment}
                   payBill={this.payBill} />

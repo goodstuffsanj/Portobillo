@@ -4,8 +4,9 @@ class Main extends Component {
 
   render() {
     return (
-      <div id="content">
-        <h1>Request Payment</h1>
+      <div id="content"> 
+        {/* <div></div> */}
+        <h2 style = {{color: '#000', marginTop:'20px', marginBottom:'20px'}}>Request Payment</h2>
 
         <form onSubmit={(event) => {
           event.preventDefault()
@@ -45,7 +46,8 @@ class Main extends Component {
         </form> <br></br><br></br>
 
         <p> </p>
-        <h1>Your Payments</h1> 
+        <h2 style = {{color: '#000', marginBottom:'20px'}}>Your Payments</h2> 
+        <h6 style = {{color: 'maroon', marginBottom:'20px'}}> Note: Payments must be made within 14 days of request. If not, the payee has every right to charge relevant additional charges in the next payment cycle. </h6>
         <table className="table">
           <thead>
             <tr>
@@ -58,33 +60,41 @@ class Main extends Component {
           </thead>
           <tbody id="productList">
           { this.props.bills.map((bill, key) => {
-            return(
-              <tr key={key}>
-                <th scope="row">{bill.id.toString()}</th>
-                <td>{bill.name}</td>
-                <td>{window.web3.utils.fromWei(bill.amount.toString(), 'Ether')} ETH</td>
-                <td>{bill.payee}</td>
-                <td>
-                  { !bill.alreadyPaid
-                    ? <button
-                        name={bill.id}
-                        value={bill.amount}
-                        onClick={(event) => {
-                          console.log("Pay button has been clicked")
-                          this.props.payBill(event.target.name, event.target.value)
-                        }}
-                      >
-                        Pay
-                      </button>
-                    : <i>Paid</i>
-                  }
-                  </td>
-              </tr>
-            )
+            if(this.props.account===bill.payer){
+              return(
+                <tr key={key}>
+                  <th scope="row">{bill.id.toString()}</th>
+                  <td>{bill.name}</td>
+                  <td>{window.web3.utils.fromWei(bill.amount.toString(), 'Ether')} ETH</td>
+                  <td>{bill.payee}</td>
+                  <td>
+                    { !bill.alreadyPaid
+                      ? <button
+                          name={bill.id}
+                          value={bill.amount}
+                          onClick={(event) => {
+                            console.log("Pay button has been clicked")
+                            this.props.payBill(event.target.name, event.target.value)
+                          }}
+                        >
+                          Pay
+                        </button>
+                      : <b style = {{color: 'green'}}>Paid</b>
+                    }
+                    </td>
+                </tr>
+              )
+            }          
           })}
 
           </tbody>
         </table>
+        <h2 style = {{color: '#000', marginBottom:'20px', marginTop: '40px'}}>
+        {/* {
+          (this.props.account===bill.payer)? <h2> Update Valid Payees </h2> : null
+        } */}
+        Update Valid Payees
+        </h2>
       </div>
     );
   }
