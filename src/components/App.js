@@ -38,6 +38,8 @@ class App extends Component {
       this.setState({billrentalpayment})
       const numberOfTransactions = await billrentalpayment.methods.numberOfTransactions().call()
       console.log(numberOfTransactions.toString())
+      const numberOfValidPayees = await billrentalpayment.methods.numberOfValidPayees().call()
+      console.log(numberOfValidPayees.toString())
       this.setState({ numberOfTransactions })
       // Load bills
       for (var i = 1; i <= numberOfTransactions; i++) {
@@ -46,7 +48,17 @@ class App extends Component {
           bills: [...this.state.bills, bill]
         })
       }
+      // const validPayeesList = await billrentalpayment.methods.validPayeesList().call()
+      // this.setState({ validPayeesList })
+
+      for (var j = 1; j <= numberOfValidPayees; j++) {
+        const validPayee = await billrentalpayment.methods.validPayeesList(j).call()
+        this.setState({
+          validPayeesList: [...this.state.validPayeesList, validPayee]
+        })
+      }
       console.log(this.state.bills)
+      console.log(this.state.validPayeesList)
 
 
       this.setState({ loading: false})
@@ -65,10 +77,12 @@ class App extends Component {
       account: '',
       numberOfTransactions: 0,
       bills: [],
+      validPayeesList: [],
       loading: true
     }
     this.requestPayment = this.requestPayment.bind(this) //this is how we let react know that requestpayment we are passing as a prop in the HTML below is the same as the function right below this constructor
     this.payBill = this.payBill.bind(this)
+    this.addValidPayee = this.addValidPayee.bind(this)
   }
 
   requestPayment(name, amount, payer) {
@@ -91,6 +105,16 @@ class App extends Component {
     })
   }
 
+  addValidPayee(validPayee) {
+    this.setState({ loading: true })
+    console.log("Inside addvalidpayee in app.js")
+    this.state.billrentalpayment.methods.addValidPayee(validPayee).send({ from: this.state.account })
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false })
+    })
+    console.log("After calling addvalidpayee in app.js ")
+  }
+
 
   render() {
     return (
@@ -104,8 +128,10 @@ class App extends Component {
                 : <Main
                   account={this.state.account}
                   bills={this.state.bills}
+                  validPayeesList={this.state.validPayeesList}
                   requestPayment={this.requestPayment}
-                  payBill={this.payBill} />
+                  payBill={this.payBill} 
+                  addValidPayee={this.addValidPayee}/>
               }
             </main>
           </div>

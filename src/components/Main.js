@@ -6,7 +6,7 @@ class Main extends Component {
     return (
       <div id="content"> 
         {/* <div></div> */}
-        <h2 style = {{color: '#000', marginTop:'20px', marginBottom:'20px'}}>Request Payment</h2>
+        <h2 style = {{color: '#000', marginTop:'40px', marginBottom:'20px'}}>Request Payment</h2>
 
         <form onSubmit={(event) => {
           event.preventDefault()
@@ -55,7 +55,7 @@ class Main extends Component {
               <th scope="col">Bill Description</th>
               <th scope="col">Amount</th>
               <th scope="col">Payee Address</th>
-              <th scope="col"></th>
+              <th scope="col">Status</th>
             </tr>
           </thead>
           <tbody id="productList">
@@ -89,12 +89,82 @@ class Main extends Component {
 
           </tbody>
         </table>
-        <h2 style = {{color: '#000', marginBottom:'20px', marginTop: '40px'}}>
+        <h2 style = {{color: '#000', marginBottom:'20px', marginTop: '50px'}}>
         {/* {
           (this.props.account===bill.payer)? <h2> Update Valid Payees </h2> : null
         } */}
         Update Valid Payees
         </h2>
+        <form onSubmit={(event) => {
+          event.preventDefault()
+          const validPayee = this.validPayee.value
+          this.props.addValidPayee(validPayee)
+        }}>
+          <div className="form-group mr-sm-2">
+            <input
+              id="validPayee"
+              type="text"
+              ref={(input) => { this.validPayee = input }}
+              className="form-control"
+              placeholder="Enter address of Payee"
+              required />
+          </div>
+          <button type="submit" className="btn btn-primary" style = {{backgroundColor: '#00266B'}}>Add Payee</button>
+        </form>
+
+        <h2 style = {{color: '#000', marginBottom:'20px', marginTop: '50px'}}>Valid Payees</h2> 
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Payee Address</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody id="validPayeeList">
+          { this.props.validPayeesList.map((validPayee, key) => {
+              return(
+                <tr key={key}>
+                  <td>{validPayee}</td>
+                  <td>
+                    {  <button
+                          // name={ValidPayee.id}
+                          // value={ValidPayee.amount}
+                          onClick={(event) => {
+                            console.log("Remove button has been clicked")
+                            this.props.payBill(event.target.name, event.target.value)
+                          }}
+                        >
+                          Remove
+                        </button>
+                    }
+                    </td>
+                </tr>
+              )      
+          })}
+
+          </tbody>
+        </table>
+        {/* <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Payee Address</th>
+            </tr>
+          </thead>
+          <tbody id="payeesList">
+            <tr>
+              <th scope="row">{this.validPayee}</th>
+            </tr>
+          { this.props.validPayeesList.map((validPayee, key) => {
+              return(
+                <tr key={key}>
+                  <th scope="row">{this.validPayee}</th>
+                </tr>
+              )       
+          })}
+
+          </tbody>
+        </table> */}
+        
       </div>
     );
   }
