@@ -10,7 +10,7 @@ class Navbar extends Component {
           href="https://sg.linkedin.com/in/shankarsanjay"
           target="_blank"
           rel="noopener noreferrer"
-          style={{color: "#000", marginLeft: "20px", fontSize: '30px', fontWeight: '50pt'}}
+          style={{color: "#000", marginLeft: "10px", fontSize: '30px', fontWeight: '50'}}
         >
           Portobillo
         </a>

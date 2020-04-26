@@ -48,7 +48,9 @@ class Main extends Component {
         <p> </p>
         <h2 style = {{color: '#000', marginBottom:'20px'}}>Your Payments</h2> 
         <h6 style = {{color: 'maroon', marginBottom:'20px'}}> Note: Payments must be made within 14 days of request. If not, the payee has every right to charge relevant additional charges in the next payment cycle. </h6>
-        <h6 style = {{color: 'maroon', marginBottom:'20px'}}> Note: Payments highlighted in red below cost more than the set upper limit. Automatic payment will be disabled for the respective payment. </h6>
+        <h6 style = {{color: 'maroon', marginBottom:'20px'}}> Note: Payments highlighted in red below either cost more than the set upper limit or are requests from unauthortised parties. </h6>
+        <h6 style = {{color: 'maroon', marginBottom:'20px', marginLeft:'40px'}}> Automatic payment will be disabled for the respective payments. </h6>
+
         <table className="table table-bordered">
           <thead className="thead-dark">
             <tr>
@@ -61,62 +63,63 @@ class Main extends Component {
           </thead>
           <tbody id="productList">
           { this.props.bills.map((bill, key) => {
-               
-            if(bill.amount >= this.props.upperLimit) {
-              console.log("Bill amount is greater than set upper limit.")
-              if(this.props.account===bill.payer){
-                return(
-                  <tr key={key}>
-                    <th scope="row" style = {{backgroundColor: 'maroon', color: 'white'}}>{bill.id.toString()}</th>
-                    <td style = {{backgroundColor: 'maroon', color: 'white'}}>{bill.name}</td>
-                    <td style = {{backgroundColor: 'maroon', color: 'white'}}>{window.web3.utils.fromWei(bill.amount.toString(), 'Ether')} ETH</td>
-                    <td style = {{backgroundColor: 'maroon', color: 'white'}}>{bill.payee}</td>
-                    <td style = {{backgroundColor: 'maroon', color: 'white'}}>
-                      { !bill.alreadyPaid
-                        ? <button
-                            name={bill.id}
-                            value={bill.amount}
-                            onClick={(event) => {
-                              console.log("Pay button has been clicked")
-                              this.props.payBill(event.target.name, event.target.value)
-                            }}
-                          >
-                            Pay
-                          </button>
-                        : <b style = {{color: 'green'}}>Paid</b>
-                      }
-                      </td>
-                  </tr>
-                )
+            
+              if(bill.amount >= this.props.upperLimit || !this.props.validPayeesList.includes(bill.payee)) {
+                console.log("Bill amount is greater than set upper limit.")
+                if(this.props.account===bill.payer){
+                  return(
+                    <tr key={key}>
+                      <th scope="row" style = {{backgroundColor: 'maroon', color: 'white'}}>{bill.id.toString()}</th>
+                      <td style = {{backgroundColor: 'maroon', color: 'white'}}>{bill.name}</td>
+                      <td style = {{backgroundColor: 'maroon', color: 'white'}}>{window.web3.utils.fromWei(bill.amount.toString(), 'Ether')} ETH</td>
+                      <td style = {{backgroundColor: 'maroon', color: 'white'}}>{bill.payee}</td>
+                      <td style = {{backgroundColor: 'maroon', color: 'white'}}>
+                        { !bill.alreadyPaid
+                          ? <button
+                              name={bill.id}
+                              value={bill.amount}
+                              onClick={(event) => {
+                                console.log("Pay button has been clicked")
+                                this.props.payBill(event.target.name, event.target.value)
+                              }}
+                            >
+                              Pay
+                            </button>
+                          : <b style = {{color: 'green'}}>Paid</b>
+                        }
+                        </td>
+                    </tr>
+                  )
+                } 
+              }    
+              else {
+                if(this.props.account===bill.payer){
+                  return(
+                    <tr key={key}>
+                      <th scope="row">{bill.id.toString()}</th>
+                      <td>{bill.name}</td>
+                      <td>{window.web3.utils.fromWei(bill.amount.toString(), 'Ether')} ETH</td>
+                      <td>{bill.payee}</td>
+                      <td>
+                        { !bill.alreadyPaid
+                          ? <button
+                              name={bill.id}
+                              value={bill.amount}
+                              onClick={(event) => {
+                                console.log("Pay button has been clicked")
+                                this.props.payBill(event.target.name, event.target.value)
+                              }}
+                            >
+                              Pay
+                            </button>
+                          : <b style = {{color: 'green'}}>Paid</b>
+                        }
+                        </td>
+                    </tr>
+                  )
+                }  
               } 
-            }    
-            else {
-              if(this.props.account===bill.payer){
-                return(
-                  <tr key={key}>
-                    <th scope="row">{bill.id.toString()}</th>
-                    <td>{bill.name}</td>
-                    <td>{window.web3.utils.fromWei(bill.amount.toString(), 'Ether')} ETH</td>
-                    <td>{bill.payee}</td>
-                    <td>
-                      { !bill.alreadyPaid
-                        ? <button
-                            name={bill.id}
-                            value={bill.amount}
-                            onClick={(event) => {
-                              console.log("Pay button has been clicked")
-                              this.props.payBill(event.target.name, event.target.value)
-                            }}
-                          >
-                            Pay
-                          </button>
-                        : <b style = {{color: 'green'}}>Paid</b>
-                      }
-                      </td>
-                  </tr>
-                )
-              }  
-            } 
+            
           })}
 
           </tbody>

@@ -83,7 +83,6 @@ class App extends Component {
         this.setState({
           validPayeesList: [...this.state.validPayeesList, validPayee]
         })
-        
         // this.setState({
         //   validPayeesList: [...this.state.validPayeesList, '0x00000000']
         // })
@@ -135,6 +134,21 @@ class App extends Component {
     if(amount >= 50000000000000000000) {
       alert("Wow. That is quite a big amount. Please reject transaction if it is incorrect.")
     }
+    // const payerValidPayeesList = ;
+    // MOVE IT TO OUTSIDE THE FUNCTION AND CREATE NEW STATE payerValidPayeesList??? -- cannot cuz need to pass payerAddress
+    // for(var j = 0; j < numberOfValidPayees; j++) {
+    //   const validPayee = await billrentalpayment.methods.validPayeesList(thisAccount, j).call()
+    //   this.setState({
+    //     payerValidPayeesList: [...this.state.payerValidPayeesList, validPayee]
+    //   })
+    // }
+    // if(payerValidPayeesList.includes(this.state.account)) {
+    //   console.log("THIS ACCOUNT IS A VALID PAYEE")
+    //   alert("THIS ACCOUNT IS A VALID PAYEE")
+    // }
+    // else {
+    //   //add the below setstate stuff
+    // }
     this.state.billrentalpayment.methods.requestPayment(name, amount, payer).send({ from: this.state.account })
     .once('receipt', (receipt) => {
       this.setState({ loading: false })
