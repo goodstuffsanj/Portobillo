@@ -38,9 +38,32 @@ class App extends Component {
       this.setState({billrentalpayment})
       const numberOfTransactions = await billrentalpayment.methods.numberOfTransactions().call()
       console.log(numberOfTransactions.toString())
-      const numberOfValidPayees = await billrentalpayment.methods.numberOfValidPayees().call()
+      
+
+      // const payer = await billrentalpayment.methods.payer().call()
+      // var payerAddress = await billrentalpayment.methods.payer().call() //RETURNING 0X0000000000!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      // var payerAddress = this.state.account 
+      // console.log(payerAddress) 
+      // this.setState({ payerAddress })
+      const thisAccount = this.state.account 
+      console.log(thisAccount) 
+      this.setState({ payer: thisAccount })
+      console.log(this.state.payer)
+
+      const numberOfValidPayees = await billrentalpayment.methods.numberOfValidPayees(thisAccount).call()
       console.log(numberOfValidPayees.toString())
-      this.setState({ numberOfTransactions })
+
+      var upperLimitValue = await billrentalpayment.methods.upperLimit(thisAccount).call()
+      if((upperLimitValue.toString()) != 0) {
+        console.log('Amount is 0')
+        this.setState({upperLimit: upperLimitValue})
+      }
+      else {
+        this.setState({upperLimit: 50000000000000000000}) //default upper limit is 50 ETH
+      }
+      console.log((upperLimitValue/1000000000000000000).toString())
+      console.log(upperLimitValue)
+
       // Load bills
       for (var i = 1; i <= numberOfTransactions; i++) {
         const bill = await billrentalpayment.methods.bills(i).call()
@@ -48,15 +71,31 @@ class App extends Component {
           bills: [...this.state.bills, bill]
         })
       }
-      // const validPayeesList = await billrentalpayment.methods.validPayeesList().call()
-      // this.setState({ validPayeesList })
+      console.log("Bills have been loaded")
 
-      for (var j = 1; j <= numberOfValidPayees; j++) {
-        const validPayee = await billrentalpayment.methods.validPayeesList(j).call()
+      // const validPayee = await billrentalpayment.methods.validPayeesList(thisAccount).call()
+      // this.setState({
+      //   validPayeesList: [...this.state.validPayeesList, validPayee]
+      // })
+
+      for (var j = 0; j < numberOfValidPayees; j++) {
+        const validPayee = await billrentalpayment.methods.validPayeesList(thisAccount, j).call()
         this.setState({
           validPayeesList: [...this.state.validPayeesList, validPayee]
         })
+        
+        // this.setState({
+        //   validPayeesList: [...this.state.validPayeesList, '0x00000000']
+        // })
       }
+      console.log("valid payees have been loaded")
+
+      // for (var j = 1; j <= numberOfValidPayees; j++) {
+      //   const validPayee = await billrentalpayment.methods.validPayeesList(j).call()
+      //   this.setState({
+      //     validPayeesList: [...this.state.validPayeesList, validPayee]
+      //   })
+      // }
       console.log(this.state.bills)
       console.log(this.state.validPayeesList)
 
@@ -76,6 +115,7 @@ class App extends Component {
     this.state = {
       account: '',
       numberOfTransactions: 0,
+      numberOfValidPayees: 0,
       bills: [],
       validPayeesList: [],
       loading: true
@@ -83,6 +123,7 @@ class App extends Component {
     this.requestPayment = this.requestPayment.bind(this) //this is how we let react know that requestpayment we are passing as a prop in the HTML below is the same as the function right below this constructor
     this.payBill = this.payBill.bind(this)
     this.addValidPayee = this.addValidPayee.bind(this)
+    this.setUpperLimit = this.setUpperLimit.bind(this)
   }
 
   requestPayment(name, amount, payer) {
@@ -90,6 +131,9 @@ class App extends Component {
     if(amount < 0) {
       alert("You have entered a negative amount which means you will be paying the payer. Is that what you want? I think not.")
       window.location.reload()
+    }
+    if(amount >= 50000000000000000000) {
+      alert("Wow. That is quite a big amount. Please reject transaction if it is incorrect.")
     }
     this.state.billrentalpayment.methods.requestPayment(name, amount, payer).send({ from: this.state.account })
     .once('receipt', (receipt) => {
@@ -99,20 +143,33 @@ class App extends Component {
 
   payBill(id, amount) {
     this.setState({ loading: true })
+    if(amount >= this.state.upperLimit) {
+      alert("This bill costs more than the set upper limit! Proceed with caution.")
+    }
     this.state.billrentalpayment.methods.payBill(id).send({ from: this.state.account, value: amount })
     .once('receipt', (receipt) => {
       this.setState({ loading: false })
     })
   }
 
-  addValidPayee(validPayee) {
+  addValidPayee(validPayee, payer) {
     this.setState({ loading: true })
     console.log("Inside addvalidpayee in app.js")
-    this.state.billrentalpayment.methods.addValidPayee(validPayee).send({ from: this.state.account })
+    this.state.billrentalpayment.methods.addValidPayee(validPayee, payer).send({ from: this.state.account })
     .once('receipt', (receipt) => {
       this.setState({ loading: false })
     })
     console.log("After calling addvalidpayee in app.js ")
+  }
+
+  setUpperLimit(newUpperLimit) {
+    console.log(newUpperLimit)
+    console.log(this.state.upperLimit)
+    this.state.billrentalpayment.methods.setUpperLimit(newUpperLimit, this.state.payer).send({ from: this.state.account })
+    .once('receipt', (receipt) => {
+      this.setState({upperLimit: newUpperLimit})
+    })
+    console.log(this.state.upperLimit)
   }
 
 
@@ -129,9 +186,11 @@ class App extends Component {
                   account={this.state.account}
                   bills={this.state.bills}
                   validPayeesList={this.state.validPayeesList}
+                  upperLimit = {this.state.upperLimit.toString()}
                   requestPayment={this.requestPayment}
                   payBill={this.payBill} 
-                  addValidPayee={this.addValidPayee}/>
+                  addValidPayee={this.addValidPayee}
+                  setUpperLimit={this.setUpperLimit}/>
               }
             </main>
           </div>

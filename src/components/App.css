@@ -1,11 +1,12 @@
 /* Styles go here */
 body {
-    background-color: ghostwhite;
+    background-color: whitesmoke;
+    margin-left: 150px;
 }
 
 .navbar {
     background-color: #00266B;
-    color: #00266B;
+    /* color: #00266B; */
     font-size: 18px;
     height: 70px;
 }
@@ -13,5 +14,14 @@ body {
 .navbar-brand {
     /* background-color: #00266B; */
     font-size: 24px;
-    color: #00266B;
+    color: #fff;
+}
+
+.table {
+    background-color: white;
+    /* color: #00266b; */
+}
+
+.thead-light {
+    background-color: #00266b;
 }

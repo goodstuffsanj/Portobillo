@@ -6,7 +6,7 @@ class Main extends Component {
     return (
       <div id="content"> 
         {/* <div></div> */}
-        <h2 style = {{color: '#000', marginTop:'40px', marginBottom:'20px'}}>Request Payment</h2>
+        <h2 style = {{color: '#000', marginTop:'50px', marginBottom:'20px'}}>Request Payment</h2>
 
         <form onSubmit={(event) => {
           event.preventDefault()
@@ -48,8 +48,9 @@ class Main extends Component {
         <p> </p>
         <h2 style = {{color: '#000', marginBottom:'20px'}}>Your Payments</h2> 
         <h6 style = {{color: 'maroon', marginBottom:'20px'}}> Note: Payments must be made within 14 days of request. If not, the payee has every right to charge relevant additional charges in the next payment cycle. </h6>
-        <table className="table">
-          <thead>
+        <h6 style = {{color: 'maroon', marginBottom:'20px'}}> Note: Payments highlighted in red below cost more than the set upper limit. Automatic payment will be disabled for the respective payment. </h6>
+        <table className="table table-bordered">
+          <thead className="thead-dark">
             <tr>
               <th scope="col">ID</th>
               <th scope="col">Bill Description</th>
@@ -60,31 +61,62 @@ class Main extends Component {
           </thead>
           <tbody id="productList">
           { this.props.bills.map((bill, key) => {
-            if(this.props.account===bill.payer){
-              return(
-                <tr key={key}>
-                  <th scope="row">{bill.id.toString()}</th>
-                  <td>{bill.name}</td>
-                  <td>{window.web3.utils.fromWei(bill.amount.toString(), 'Ether')} ETH</td>
-                  <td>{bill.payee}</td>
-                  <td>
-                    { !bill.alreadyPaid
-                      ? <button
-                          name={bill.id}
-                          value={bill.amount}
-                          onClick={(event) => {
-                            console.log("Pay button has been clicked")
-                            this.props.payBill(event.target.name, event.target.value)
-                          }}
-                        >
-                          Pay
-                        </button>
-                      : <b style = {{color: 'green'}}>Paid</b>
-                    }
-                    </td>
-                </tr>
-              )
-            }          
+               
+            if(bill.amount >= this.props.upperLimit) {
+              console.log("Bill amount is greater than set upper limit.")
+              if(this.props.account===bill.payer){
+                return(
+                  <tr key={key}>
+                    <th scope="row" style = {{backgroundColor: 'maroon', color: 'white'}}>{bill.id.toString()}</th>
+                    <td style = {{backgroundColor: 'maroon', color: 'white'}}>{bill.name}</td>
+                    <td style = {{backgroundColor: 'maroon', color: 'white'}}>{window.web3.utils.fromWei(bill.amount.toString(), 'Ether')} ETH</td>
+                    <td style = {{backgroundColor: 'maroon', color: 'white'}}>{bill.payee}</td>
+                    <td style = {{backgroundColor: 'maroon', color: 'white'}}>
+                      { !bill.alreadyPaid
+                        ? <button
+                            name={bill.id}
+                            value={bill.amount}
+                            onClick={(event) => {
+                              console.log("Pay button has been clicked")
+                              this.props.payBill(event.target.name, event.target.value)
+                            }}
+                          >
+                            Pay
+                          </button>
+                        : <b style = {{color: 'green'}}>Paid</b>
+                      }
+                      </td>
+                  </tr>
+                )
+              } 
+            }    
+            else {
+              if(this.props.account===bill.payer){
+                return(
+                  <tr key={key}>
+                    <th scope="row">{bill.id.toString()}</th>
+                    <td>{bill.name}</td>
+                    <td>{window.web3.utils.fromWei(bill.amount.toString(), 'Ether')} ETH</td>
+                    <td>{bill.payee}</td>
+                    <td>
+                      { !bill.alreadyPaid
+                        ? <button
+                            name={bill.id}
+                            value={bill.amount}
+                            onClick={(event) => {
+                              console.log("Pay button has been clicked")
+                              this.props.payBill(event.target.name, event.target.value)
+                            }}
+                          >
+                            Pay
+                          </button>
+                        : <b style = {{color: 'green'}}>Paid</b>
+                      }
+                      </td>
+                  </tr>
+                )
+              }  
+            } 
           })}
 
           </tbody>
@@ -93,12 +125,14 @@ class Main extends Component {
         {/* {
           (this.props.account===bill.payer)? <h2> Update Valid Payees </h2> : null
         } */}
-        Update Valid Payees
+        Add Valid Payees
         </h2>
         <form onSubmit={(event) => {
           event.preventDefault()
           const validPayee = this.validPayee.value
-          this.props.addValidPayee(validPayee)
+          const payer = this.props.account
+          this.props.addValidPayee(validPayee, payer)
+          alert("New Payee is being authorised to send you payment requests. Proceed with caution!")
         }}>
           <div className="form-group mr-sm-2">
             <input
@@ -114,7 +148,7 @@ class Main extends Component {
 
         <h2 style = {{color: '#000', marginBottom:'20px', marginTop: '50px'}}>Valid Payees</h2> 
         <table className="table">
-          <thead>
+          <thead className="thead-dark">
             <tr>
               <th scope="col">Payee Address</th>
               <th scope="col"></th>
@@ -144,26 +178,27 @@ class Main extends Component {
 
           </tbody>
         </table>
-        {/* <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Payee Address</th>
-            </tr>
-          </thead>
-          <tbody id="payeesList">
-            <tr>
-              <th scope="row">{this.validPayee}</th>
-            </tr>
-          { this.props.validPayeesList.map((validPayee, key) => {
-              return(
-                <tr key={key}>
-                  <th scope="row">{this.validPayee}</th>
-                </tr>
-              )       
-          })}
 
-          </tbody>
-        </table> */}
+        <h2 style = {{color: '#000', marginTop:'40px', marginBottom:'20px'}}>View and Update Upper Limit</h2>
+        <h6 style = {{color: 'maroon', marginBottom:'20px'}}> Note: Automatic payment will be disabled for payments that cost more than set upper limit. </h6>
+
+        <h5 style = {{marginBottom:'20px'}}>The upper limit for bill amounts is currently: <span style = {{color:'green'}}>{this.props.upperLimit/1000000000000000000} ETH</span></h5> 
+        <form onSubmit={(event) => {
+          event.preventDefault()
+          const newUpperLimit = window.web3.utils.toWei(this.newUpperLimit.value.toString(), 'Ether')
+          this.props.setUpperLimit(newUpperLimit)
+        }}>
+          <div className="form-group mr-sm-2">
+            <input
+              id="upperLimit"
+              type="text"
+              ref={(input) => { this.newUpperLimit = input }}
+              className="form-control"
+              placeholder="New Upper Limit Amount"
+              required />
+          </div>
+          <button type="submit" className="btn btn-primary" style = {{backgroundColor: '#00266B'}}>Update</button>
+        </form> <br></br>
         
       </div>
     );
