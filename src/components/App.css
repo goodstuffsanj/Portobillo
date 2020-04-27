@@ -1,7 +1,44 @@
 /* Styles go here */
 body {
-    background-color: whitesmoke;
-    margin-left: 150px;
+    background-color: rgb(247, 247, 247);
+    /* background-image: url('https://thumbs.gfycat.com/UntidySickHairstreak-size_restricted.gif'); */
+    /* background-image: url('https://i.pinimg.com/originals/74/43/a3/7443a31b6a19e5630b94a6538ff9bdd1.gif'); */
+    /* background-image: url('../cool-background-white.png'); */
+    margin-left: 90px;
+}
+
+#container4 {
+    background-image: url('https://thumbs.gfycat.com/UntidySickHairstreak-size_restricted.gif');
+    display: inline-block !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-size: cover;
+    left:0;
+    bottom: 0;
+    right:0;
+    top:0;
+    margin-left: -170px;
+    margin-top: -100px;
+    text-align: center;
+}
+
+#homepage {
+    background-image: url('https://thumbs.gfycat.com/UntidySickHairstreak-size_restricted.gif');
+    display: inline-block !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    width: 100% !important;
+    height: 800px !important;
+    background-size: cover;
+    left:0;
+    bottom: 0;
+    right:0;
+    top:0;
+    margin-left: 0px;
+    margin-top: 0px;
+    text-align: center;
 }
 
 .navbar {
@@ -24,4 +61,73 @@ body {
 
 .thead-light {
     background-color: #00266b;
+}
+
+.link {
+    text-decoration: none;
+}
+
+.link-home {
+    text-decoration: none;
+    color: white;
+}
+
+.link:hover {
+    text-decoration: none;
+    color: maroon !important;
+}
+
+.link-home:hover {
+    text-decoration: none;
+    color: white;
+}
+
+.link-portobillo:hover {
+    font-size: 50px;
+}
+
+#content {
+    align-content: left;
+}
+
+.form-control {
+    width: 1050px !important;
+    align-content: center !important;
+}
+
+.table {
+    width: 88% !important;
+}
+
+.btn:hover {
+    background-color: #011842;
+}
+
+
+.btn-home {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.btn-home:hover {
+    background-color: green !important;
+}
+
+.welcome-text {
+    align-content: center;
+
+}
+
+#paybillpage {
+    margin-left: 80px;
+}
+
+#settingspage {
+    margin-left: 80px;
+    width: 800px
+}
+
+.table {
+    width: 1100px !important;
 }

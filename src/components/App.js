@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
 // import logo from '../logo.png';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
 import './App.css';
 import Web3 from 'web3'; 
 import BillRentalPayment from '../abis/BillRentalPayment.json';
 import Navbar from './Navbar'
 import Main from './Main'
+import Home from './Home'
+import RequestPayment from './RequestPayment'
+import PayBill from './PayBill'
+import Settings from './Settings'
 
 class App extends Component {
 
@@ -186,32 +198,142 @@ class App extends Component {
     console.log(this.state.upperLimit)
   }
 
-
   render() {
-    return (
-      <div>
-        <Navbar account={this.state.account} />
-        <div className="container-fluid mt-5">
-          <div className = "row">
-            <main role="main" className="col-lg-12 d-flex">
-              { this.state.loading
-                ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>
-                : <Main
-                  account={this.state.account}
-                  bills={this.state.bills}
-                  validPayeesList={this.state.validPayeesList}
-                  upperLimit = {this.state.upperLimit.toString()}
-                  requestPayment={this.requestPayment}
-                  payBill={this.payBill} 
-                  addValidPayee={this.addValidPayee}
-                  setUpperLimit={this.setUpperLimit}/>
-              }
-            </main>
-          </div>
-        </div>
-      </div>
-    );
+      return (
+        <Router>
+            <Switch>
+              {/* <Route path='/' component={Navbar}/> */}
+              <Route exact path='/' render={(props) => { return (<Home {...props} account={this.state.account}/>); }}/>
+              <Route path='/requestpayment' render={(props) => { return (<RequestPayment {...props} state={this.state} account={this.state.account} bills={this.state.bills} validPayeesList={this.state.validPayeesList} upperLimit = {this.state.upperLimit} requestPayment={this.requestPayment} payBill={this.payBill} addValidPayee={this.addValidPayee} setUpperLimit={this.setUpperLimit}/>); }} />
+              <Route path='/paybill' render={(props) => { return (<PayBill {...props} account={this.state.account} bills={this.state.bills} validPayeesList={this.state.validPayeesList} upperLimit = {this.state.upperLimit} requestPayment={this.requestPayment} payBill={this.payBill}  addValidPayee={this.addValidPayee} setUpperLimit={this.setUpperLimit}/>); }} />
+              <Route path='/settings' render={(props) => { return (<Settings {...props} account={this.state.account} bills={this.state.bills} validPayeesList={this.state.validPayeesList} upperLimit = {this.state.upperLimit} requestPayment={this.requestPayment} payBill={this.payBill}  addValidPayee={this.addValidPayee} setUpperLimit={this.setUpperLimit}/>); }} />
+            </Switch>  
+        </Router>  
+
+// {/* <Route path='/home/:id' render={(props) => { return (<Home {...props} state={this.state} updateApp={this.updateApp}/>); }} />  */}
+
+        // <div>
+        //   <Navbar account={this.state.account} />
+        //   <div className="container-fluid mt-5">
+        //     <div className = "row">
+        //       <main role="main" className="col-lg-12 d-flex">
+        //         { this.state.loading
+        //           ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>
+        //           : <Main
+        //             account={this.state.account}
+        //             bills={this.state.bills}
+        //             validPayeesList={this.state.validPayeesList}
+        //             upperLimit = {this.state.upperLimit.toString()}
+        //             requestPayment={this.requestPayment}
+        //             payBill={this.payBill} 
+        //             addValidPayee={this.addValidPayee}
+        //             setUpperLimit={this.setUpperLimit}/>
+        //         }
+        //       </main>
+        //     </div>
+        //   </div>
+        // </div>
+      );
+    }
   }
-}
+
+
+//   render() {
+//     return (
+//       <div>
+//         <Navbar account={this.state.account} />
+//         <div className="container-fluid mt-5">
+//           <div className = "row">
+//             <main role="main" className="col-lg-12 d-flex">
+//               { this.state.loading
+//                 ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>
+//                 : <Main
+//                   account={this.state.account}
+//                   bills={this.state.bills}
+//                   validPayeesList={this.state.validPayeesList}
+//                   upperLimit = {this.state.upperLimit.toString()}
+//                   requestPayment={this.requestPayment}
+//                   payBill={this.payBill} 
+//                   addValidPayee={this.addValidPayee}
+//                   setUpperLimit={this.setUpperLimit}/>
+//               }
+//             </main>
+//           </div>
+//         </div>
+//       </div>
+//     );
+//   }
+// }
 
 export default App;
+
+
+
+
+
+
+// import React, { Component } from 'react';
+// import './App.css';
+// import ReactSwipe from 'react-swipe';
+// import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
+// import Home from './Home';
+// import History from './History';
+// import Discover from './Discover';
+// import More from './More';
+// import ScanQRWithdraw from './ScanQRWithdraw';
+// import ScanQRDepositCash from './ScanQRDepositCash'
+// import SelectCard from './SelectCard';
+// import ListView from './ListView';
+// import Header from './Header';
+// import Deposit from './Deposit';
+// import Done from './Done';
+// import UploadCheque from './UploadCheque';
+// import WaitingATM from './WaitingATM';
+// import WithdrawDetails from './WithdrawalDetails';
+// import DepositCashDetails from './DepositCashDetails';
+// import DepositChequeDetails from "./DepositChequeDetails";
+
+// class App extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//     }
+//     this.updateApp = this.updateApp.bind(this);
+//   }
+
+//   updateApp = (state) => {
+//     this.setState(state)
+//   }
+
+//   render() {
+//     console.log(this.state)
+//     return (
+//       <Router>
+//         <div>
+//           <Switch>
+//             <Route path='/home/:id' render={(props) => { return (<Home {...props} state={this.state} updateApp={this.updateApp}/>); }} />
+//             <Route path='/history/' render={(props) => { return (<History {...props} state={this.state} updateApp={this.updateApp}/>); }}/>
+//             <Route path='/discover' render={(props) => { return (<Discover {...props} state={this.state} updateApp={this.updateApp}/>); }}/>
+//             <Route path='/more' render={(props) => { return (<More state={this.state} updateApp={this.updateApp}/>); }}/>
+//             <Route path='/withdraw' render={(props) => { return (<SelectCard {...props} to='withdrawalDetails' state={this.state} updateApp={this.updateApp}/>); }}/>
+//             <Route path='/deposit' render={(props) => { return (<Deposit {...props} state={this.state} updateApp={this.updateApp}/>); }}/>
+//             <Route path='/depositCash' render={(props) => { return (<SelectCard {...props} to='depositCashDetails' state={this.state} updateApp={this.updateApp}/>); }}/>
+//             <Route path='/depositChequeDetails' render={(props) =>{ return (<DepositChequeDetails {...props} state={this.state} updateApp={this.updateApp}/>)}} updateApp={this.updateApp}/>
+//             <Route path='/scanQRWithdraw' render={(props) => { return(<ScanQRWithdraw {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
+//             <Route path='/scanQRDepositCash' render={(props) => { return(<ScanQRDepositCash {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
+//             <Route path='/withdrawalDetails' render={(props) => { return(<WithdrawDetails {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
+//             <Route path='/depositCashDetails' render={(props) => { return(<DepositCashDetails {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
+//             <Route path='/uploadCheque' render={(props) => { return(<UploadCheque {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
+//             <Route path='/listView/:var' component={ListView}/>
+//             <Route path='/header' render={(props) => { return(<Header {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
+//             <Route path='/done' render={(props) => { return(<Done {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
+//             <Route path='/waitingATM' render={(props) => { return(<WaitingATM {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
+//           </Switch>
+//         </div>
+//       </Router>
+//     );
+//   }
+  
+// }
+
+// export default App;
