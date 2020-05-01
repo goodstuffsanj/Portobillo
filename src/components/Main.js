@@ -164,8 +164,6 @@ class Main extends Component {
                   <td>{validPayee}</td>
                   <td>
                     {  <button
-                          // name={ValidPayee.id}
-                          // value={ValidPayee.amount}
                           onClick={(event) => {
                             console.log("Remove button has been clicked")
                             this.props.payBill(event.target.name, event.target.value)

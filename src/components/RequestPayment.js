@@ -15,10 +15,9 @@ class RequestPayment extends Component {
 
   render() {
     return (
-        // <Navbar account={this.state.account} />,
       <body>
         <nav className="navbar navbar-light fixed-top flex-md-nowrap p-0 shadow" style={{backgroundColor: "#FFFF", borderBottom: '5px solid #00266b'}}>
-            <Link to="https://sg.linkedin.com/in/shankarsanjay" className="link" style={{color: "#000", marginLeft: "50px", fontSize: '30px', fontWeight: '50pt', textDecoration: 'none'}} target="_blank">Portobillo</Link>
+            <Link to="/" className="link" style={{color: "#000", marginLeft: "50px", fontSize: '30px', fontWeight: '50pt', textDecoration: 'none'}} target="_blank">Portobillo</Link>
             <Link to="/" className="link" style={{color: "#00266b", marginLeft: "-150px", marginTop: "5px", fontSize: '20px'}}>Home</Link>
             <Link to="/requestpayment" className="link" style={{color: "#00266b", marginLeft: "-170px", marginTop: "5px", fontSize: '20px'}}>Request Payment</Link>
             <Link to="/paybill" className="link" style={{color: "#00266b", marginLeft: "-170px", marginTop: "5px", fontSize: '20px'}}>Pay Bill</Link>

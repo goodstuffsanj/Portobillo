@@ -15,7 +15,6 @@ class Settings extends Component {
 
   render() {
     return (
-        // <Navbar account={this.state.account} />,
       <div id='settingspage'>
         <nav className="navbar navbar-light fixed-top flex-md-nowrap p-0 shadow" style={{backgroundColor: "#FFFF", borderBottom: '5px solid #00266b'}}>
             <Link to="https://sg.linkedin.com/in/shankarsanjay" className="link" style={{color: "#000", marginLeft: "50px", fontSize: '30px', fontWeight: '50pt', textDecoration: 'none'}} target="_blank">Portobillo</Link>
@@ -31,9 +30,6 @@ class Settings extends Component {
         </nav>
 
         <h2 style = {{color: '#000', marginBottom:'20px', marginTop: '100px'}}>
-        {/* {
-          (this.props.account===bill.payer)? <h2> Update Valid Payees </h2> : null
-        } */}
         Add Valid Payees
         </h2>
         <form onSubmit={(event) => {

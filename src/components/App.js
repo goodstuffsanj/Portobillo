@@ -51,12 +51,6 @@ class App extends Component {
       const numberOfTransactions = await billrentalpayment.methods.numberOfTransactions().call()
       console.log(numberOfTransactions.toString())
       
-
-      // const payer = await billrentalpayment.methods.payer().call()
-      // var payerAddress = await billrentalpayment.methods.payer().call() //RETURNING 0X0000000000!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      // var payerAddress = this.state.account 
-      // console.log(payerAddress) 
-      // this.setState({ payerAddress })
       const thisAccount = this.state.account 
       console.log(thisAccount) 
       this.setState({ payer: thisAccount })
@@ -85,28 +79,13 @@ class App extends Component {
       }
       console.log("Bills have been loaded")
 
-      // const validPayee = await billrentalpayment.methods.validPayeesList(thisAccount).call()
-      // this.setState({
-      //   validPayeesList: [...this.state.validPayeesList, validPayee]
-      // })
-
       for (var j = 0; j < numberOfValidPayees; j++) {
         const validPayee = await billrentalpayment.methods.validPayeesList(thisAccount, j).call()
         this.setState({
           validPayeesList: [...this.state.validPayeesList, validPayee]
         })
-        // this.setState({
-        //   validPayeesList: [...this.state.validPayeesList, '0x00000000']
-        // })
       }
       console.log("valid payees have been loaded")
-
-      // for (var j = 1; j <= numberOfValidPayees; j++) {
-      //   const validPayee = await billrentalpayment.methods.validPayeesList(j).call()
-      //   this.setState({
-      //     validPayeesList: [...this.state.validPayeesList, validPayee]
-      //   })
-      // }
       console.log(this.state.bills)
       console.log(this.state.validPayeesList)
 
@@ -146,21 +125,6 @@ class App extends Component {
     if(amount >= 50000000000000000000) {
       alert("Wow. That is quite a big amount. Please reject transaction if it is incorrect.")
     }
-    // const payerValidPayeesList = ;
-    // MOVE IT TO OUTSIDE THE FUNCTION AND CREATE NEW STATE payerValidPayeesList??? -- cannot cuz need to pass payerAddress
-    // for(var j = 0; j < numberOfValidPayees; j++) {
-    //   const validPayee = await billrentalpayment.methods.validPayeesList(thisAccount, j).call()
-    //   this.setState({
-    //     payerValidPayeesList: [...this.state.payerValidPayeesList, validPayee]
-    //   })
-    // }
-    // if(payerValidPayeesList.includes(this.state.account)) {
-    //   console.log("THIS ACCOUNT IS A VALID PAYEE")
-    //   alert("THIS ACCOUNT IS A VALID PAYEE")
-    // }
-    // else {
-    //   //add the below setstate stuff
-    // }
     this.state.billrentalpayment.methods.requestPayment(name, amount, payer).send({ from: this.state.account })
     .once('receipt', (receipt) => {
       this.setState({ loading: false })
@@ -210,130 +174,8 @@ class App extends Component {
             </Switch>  
         </Router>  
 
-// {/* <Route path='/home/:id' render={(props) => { return (<Home {...props} state={this.state} updateApp={this.updateApp}/>); }} />  */}
-
-        // <div>
-        //   <Navbar account={this.state.account} />
-        //   <div className="container-fluid mt-5">
-        //     <div className = "row">
-        //       <main role="main" className="col-lg-12 d-flex">
-        //         { this.state.loading
-        //           ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>
-        //           : <Main
-        //             account={this.state.account}
-        //             bills={this.state.bills}
-        //             validPayeesList={this.state.validPayeesList}
-        //             upperLimit = {this.state.upperLimit.toString()}
-        //             requestPayment={this.requestPayment}
-        //             payBill={this.payBill} 
-        //             addValidPayee={this.addValidPayee}
-        //             setUpperLimit={this.setUpperLimit}/>
-        //         }
-        //       </main>
-        //     </div>
-        //   </div>
-        // </div>
       );
     }
   }
 
-
-//   render() {
-//     return (
-//       <div>
-//         <Navbar account={this.state.account} />
-//         <div className="container-fluid mt-5">
-//           <div className = "row">
-//             <main role="main" className="col-lg-12 d-flex">
-//               { this.state.loading
-//                 ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>
-//                 : <Main
-//                   account={this.state.account}
-//                   bills={this.state.bills}
-//                   validPayeesList={this.state.validPayeesList}
-//                   upperLimit = {this.state.upperLimit.toString()}
-//                   requestPayment={this.requestPayment}
-//                   payBill={this.payBill} 
-//                   addValidPayee={this.addValidPayee}
-//                   setUpperLimit={this.setUpperLimit}/>
-//               }
-//             </main>
-//           </div>
-//         </div>
-//       </div>
-//     );
-//   }
-// }
-
 export default App;
-
-
-
-
-
-
-// import React, { Component } from 'react';
-// import './App.css';
-// import ReactSwipe from 'react-swipe';
-// import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
-// import Home from './Home';
-// import History from './History';
-// import Discover from './Discover';
-// import More from './More';
-// import ScanQRWithdraw from './ScanQRWithdraw';
-// import ScanQRDepositCash from './ScanQRDepositCash'
-// import SelectCard from './SelectCard';
-// import ListView from './ListView';
-// import Header from './Header';
-// import Deposit from './Deposit';
-// import Done from './Done';
-// import UploadCheque from './UploadCheque';
-// import WaitingATM from './WaitingATM';
-// import WithdrawDetails from './WithdrawalDetails';
-// import DepositCashDetails from './DepositCashDetails';
-// import DepositChequeDetails from "./DepositChequeDetails";
-
-// class App extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//     }
-//     this.updateApp = this.updateApp.bind(this);
-//   }
-
-//   updateApp = (state) => {
-//     this.setState(state)
-//   }
-
-//   render() {
-//     console.log(this.state)
-//     return (
-//       <Router>
-//         <div>
-//           <Switch>
-//             <Route path='/home/:id' render={(props) => { return (<Home {...props} state={this.state} updateApp={this.updateApp}/>); }} />
-//             <Route path='/history/' render={(props) => { return (<History {...props} state={this.state} updateApp={this.updateApp}/>); }}/>
-//             <Route path='/discover' render={(props) => { return (<Discover {...props} state={this.state} updateApp={this.updateApp}/>); }}/>
-//             <Route path='/more' render={(props) => { return (<More state={this.state} updateApp={this.updateApp}/>); }}/>
-//             <Route path='/withdraw' render={(props) => { return (<SelectCard {...props} to='withdrawalDetails' state={this.state} updateApp={this.updateApp}/>); }}/>
-//             <Route path='/deposit' render={(props) => { return (<Deposit {...props} state={this.state} updateApp={this.updateApp}/>); }}/>
-//             <Route path='/depositCash' render={(props) => { return (<SelectCard {...props} to='depositCashDetails' state={this.state} updateApp={this.updateApp}/>); }}/>
-//             <Route path='/depositChequeDetails' render={(props) =>{ return (<DepositChequeDetails {...props} state={this.state} updateApp={this.updateApp}/>)}} updateApp={this.updateApp}/>
-//             <Route path='/scanQRWithdraw' render={(props) => { return(<ScanQRWithdraw {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
-//             <Route path='/scanQRDepositCash' render={(props) => { return(<ScanQRDepositCash {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
-//             <Route path='/withdrawalDetails' render={(props) => { return(<WithdrawDetails {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
-//             <Route path='/depositCashDetails' render={(props) => { return(<DepositCashDetails {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
-//             <Route path='/uploadCheque' render={(props) => { return(<UploadCheque {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
-//             <Route path='/listView/:var' component={ListView}/>
-//             <Route path='/header' render={(props) => { return(<Header {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
-//             <Route path='/done' render={(props) => { return(<Done {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
-//             <Route path='/waitingATM' render={(props) => { return(<WaitingATM {...props} state={this.state} updateApp={this.updateApp}/>)}}/>
-//           </Switch>
-//         </div>
-//       </Router>
-//     );
-//   }
-  
-// }
-
-// export default App;

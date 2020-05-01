@@ -1,9 +1,5 @@
-/* Styles go here */
 body {
     background-color: rgb(247, 247, 247);
-    /* background-image: url('https://thumbs.gfycat.com/UntidySickHairstreak-size_restricted.gif'); */
-    /* background-image: url('https://i.pinimg.com/originals/74/43/a3/7443a31b6a19e5630b94a6538ff9bdd1.gif'); */
-    /* background-image: url('../cool-background-white.png'); */
     margin-left: 90px;
 }
 
@@ -43,13 +39,11 @@ body {
 
 .navbar {
     background-color: #00266B;
-    /* color: #00266B; */
     font-size: 18px;
     height: 70px;
 }
 
 .navbar-brand {
-    /* background-color: #00266B; */
     font-size: 24px;
     color: #fff;
 }
@@ -131,3 +125,4 @@ body {
 .table {
     width: 1100px !important;
 }
+
